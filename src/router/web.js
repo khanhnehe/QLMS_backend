@@ -4,6 +4,7 @@ import testHome from "../controllers/testHome";
 import NXBController from "../controllers/NXBController";
 import nhanVienController from "../controllers/nhanVienController";
 import sachController from "../controllers/sachController";
+import cartController from "../controllers/cartController";
 
 let router = express.Router();
 
@@ -35,6 +36,11 @@ let initWebRouters = (app) => {
     router.put('/editNhanVien', nhanVienController.editNhanVien)
     router.delete('/deleteNhanVien/:nhanVienId', nhanVienController.deleteNhanVien)
     router.get('/getAllNhanVien', nhanVienController.getAllNhanVien)
+
+    //cart
+    router.get('/getCartByUseId/:docgiaId', cartController.getCartByUseId)
+    router.post('/addCart', cartController.addCart)
+    router.delete('/deleteSachCart/:sachId', cartController.deleteSachCart)
 
 
     return app.use("/", router)
