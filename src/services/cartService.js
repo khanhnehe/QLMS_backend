@@ -22,17 +22,6 @@ const addCart = async (data) => {
                 // Tìm sách trong db
                 const sach = await Sach.findById(item.sach);
 
-                // Xác định số lượng sách có sẵn
-                const availableQuantity = sach.soQuyen;
-
-                // Nếu số lượng sách muốn thêm vào giỏ hàng lớn hơn số lượng có sẵn, trả về lỗi
-                if (item.amount > availableQuantity) {
-                    resolve({
-                        errCode: -3,
-                        errMessage: `Sách này chỉ còn ${availableQuantity} quyển có sẵn!`
-                    });
-                    return;
-                }
 
                 // Kiểm tra xem sách đã exist trong cart chưa
                 let isExistCartItem = cart.cartItems.find(cartItem =>
@@ -41,8 +30,16 @@ const addCart = async (data) => {
                 );
 
                 if (isExistCartItem) {
-                    isExistCartItem.amount += item.amount;
-                    isExistCartItem.price += sach.donGia * item.amount;
+                    // Kiểm tra xem số lượng sách sau khi thêm có vượt quá 1 không
+                    if (isExistCartItem.amount + 1 > 1) {
+                        resolve({
+                            errCode: -4,
+                            errMessage: `Mỗi độc giả chỉ được mượn tối đa 1 quyển sách cùng loại!`
+                        });
+                        return;
+                    }
+                    isExistCartItem.amount += 1;
+                    isExistCartItem.price += sach.donGia;
                 } else {
                     // Nếu sách chưa có trong giỏ hàng, thêm mới
                     isExistCartItem = {
@@ -50,13 +47,13 @@ const addCart = async (data) => {
                         name: sach.tenSach,
                         image: sach.anhSach[0],
                         price: sach.donGia,
-                        amount: item.amount,
+                        amount: 1,
                     };
                     cart.cartItems.push(isExistCartItem);
                 }
 
                 // Cập nhật tổng giá trị giỏ hàng
-                cart.totalPrice += item.amount * sach.donGia;
+                cart.totalPrice += sach.donGia;
             }
 
             await cart.save();
@@ -73,7 +70,6 @@ const addCart = async (data) => {
         }
     });
 }
-
 //lấy ra giỏ hàng của docgia
 const getCartByUseId = async (docgiaId) => {
     try {
