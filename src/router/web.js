@@ -5,6 +5,7 @@ import NXBController from "../controllers/NXBController";
 import nhanVienController from "../controllers/nhanVienController";
 import sachController from "../controllers/sachController";
 import cartController from "../controllers/cartController";
+import phieuController from "../controllers/phieuController";
 
 let router = express.Router();
 
@@ -38,9 +39,16 @@ let initWebRouters = (app) => {
     router.get('/getAllNhanVien', nhanVienController.getAllNhanVien)
 
     //cart
-    router.get('/getCartByUseId/:docgiaId', cartController.getCartByUseId)
     router.post('/addCart', cartController.addCart)
+    router.get('/getCartByUseId/:docgiaId', cartController.getCartByUseId)
     router.delete('/deleteSachCart/:sachId', cartController.deleteSachCart)
+
+    // phiếu mượn
+    router.post('/checkOutPhieu', phieuController.checkOutPhieu)
+    // router.put('/confirmStatus/:phieuId', phieuController.confirmStatus)
+    // router.get('/admin/filterStatus',  phieuController.filterStatus)
+
+
 
 
     return app.use("/", router)
