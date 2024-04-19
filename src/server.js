@@ -6,7 +6,6 @@ const cors = require("cors");
 const initWebRouters = require("./router/web"); // Import router của backend
 
 const app = express();
-initWebRouters(app);
 
 app.use(cors({
     origin: "http://localhost:3004",
@@ -17,8 +16,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Khi sử dụng tiền tố '/api', chuyển các request đến router của backend
-app.use('/api', initWebRouters);
-
+app.use('/api', initWebRouters(app));
 // Trả về 404 cho các request không được hỗ trợ
 app.use((req, res) => {
     res.status(404).send('404 not found');

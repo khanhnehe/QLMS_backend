@@ -15,10 +15,10 @@ let router = express.Router();
 let initWebRouters = (app) => {
     router.get("/", testHome.getHome);
     //docgia
-    router.post('/createDocGia', docGiaController.createDocGia)
-    router.put('/editDocGia/:docgiaId', docGiaController.editDocGia)
-    router.delete('/deleteDocGia/:docgiaId', docGiaController.deleteDocGia)
-    router.get('/getAllDocGia', docGiaController.getAllDocGia)
+    router.post('/api/createDocGia', docGiaController.createDocGia)
+    router.put('/api/editDocGia/:docgiaId', docGiaController.editDocGia)
+    router.delete('/api/deleteDocGia/:docgiaId', docGiaController.deleteDocGia)
+    router.get('/api/getAllDocGia', docGiaController.getAllDocGia)
 
     //nxb
     router.post('/createNXB', NXBController.createNXB)
@@ -51,7 +51,6 @@ let initWebRouters = (app) => {
 
 
 
-    return app.use("/api", router)
-
+    return router;
 }
 module.exports = initWebRouters;
