@@ -89,8 +89,24 @@ const confirmStatus = (phieuId, trangThai) => {
     });
 }
 
+const getAllPhieu = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const phieu = await PhieuMuon.find().sort({ createdAt: -1, updatedAt: -1 })
+            resolve({
+                errCode: 0,
+                errMessage: 'ok',
+                phieu
+            });
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 
 module.exports = {
     checkOutPhieu,
-    confirmStatus
+    confirmStatus,
+    getAllPhieu
 }

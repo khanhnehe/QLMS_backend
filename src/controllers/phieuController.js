@@ -38,7 +38,25 @@ const confirmStatus = async (req, res) => {
     }
 }
 
+const getAllPhieu = async (req, res) => {
+    try {
+        let response = await phieuService.getAllPhieu();
+        return res.status(200).json({
+            errCode: response.errCode,
+            errMessage: response.errMessage,
+            phieu: response.phieu
+        });
+    } catch (e) {
+        console.log(e)
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server!'
+        })
+    }
+}
+
 module.exports = {
     checkOutPhieu,
-    confirmStatus
+    confirmStatus,
+    getAllPhieu
 }
