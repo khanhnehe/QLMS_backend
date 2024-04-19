@@ -1,6 +1,7 @@
 import NXB from '../models/NXBModel';
 
 const createNXB = async (data) => {
+    console.log('data', data)
     return new Promise(async (resolve, reject) => {
         try {
 

@@ -51,7 +51,7 @@ let initWebRouters = (app) => {
 
 
 
-    return app.use("/", router)
+    return app.use("/api", router)
 
 }
 module.exports = initWebRouters;
