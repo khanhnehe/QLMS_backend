@@ -1,9 +1,6 @@
 import PhieuMuon from '../models/phieuMuon';
 import Cart from '../models/cartModel';
 
-
-
-
 const checkOutPhieu = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -55,10 +52,45 @@ const checkOutPhieu = (data) => {
     });
 }
 
-module.exports = {
-    checkOutPhieu
-};
+const confirmStatus = (phieuId, trangThai) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const phieu = await PhieuMuon.findById(phieuId);
+            if (!phieu) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Phiếu not found'
+                });
+            } else {
+                let actionStatus = { trangThai: trangThai };
+
+                // Nếu trạng thái mới là "Đang mượn", cập nhật ngayMuon và ngayTra
+                if (trangThai === 'Đang mượn') {
+                    actionStatus.ngayMuon = new Date();
+                    actionStatus.hanTra = new Date();
+                    actionStatus.hanTra.setDate(actionStatus.ngayMuon.getDate() + 15);
+                }
+                // Nếu trạng thái mới là "Đã trả", cập nhật ngayTra
+                if (trangThai === 'Đã trả') {
+                    actionStatus.ngayTra = new Date();
+                }
+
+
+                await PhieuMuon.updateOne({ _id: phieuId }, actionStatus);
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Trạng thái đã được cập nhật',
+                    phieu
+                });
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
 
 module.exports = {
-    checkOutPhieu
+    checkOutPhieu,
+    confirmStatus
 }

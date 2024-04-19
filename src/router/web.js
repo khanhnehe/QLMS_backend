@@ -45,7 +45,7 @@ let initWebRouters = (app) => {
 
     // phiếu mượn
     router.post('/checkOutPhieu', phieuController.checkOutPhieu)
-    // router.put('/confirmStatus/:phieuId', phieuController.confirmStatus)
+    router.put('/confirmStatus/:phieuId', phieuController.confirmStatus)
     // router.get('/admin/filterStatus',  phieuController.filterStatus)
 
 

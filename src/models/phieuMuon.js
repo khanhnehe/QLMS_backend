@@ -35,6 +35,9 @@ const PhieuMuonSchema = new mongoose.Schema({
     ngayMuon: {
         type: Date,
     },
+    hanTra: {
+        type: Date,
+    },
     ngayTra: {
         type: Date,
     },
