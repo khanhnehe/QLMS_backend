@@ -1,6 +1,23 @@
 import Sach from '../models/sachModel';
 
 
+const getAllSach = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let sach = await Sach.find().sort({ createdAt: -1, updatedAt: -1 })
+                .populate('MaXNB', 'tenNXB');
+
+            resolve({
+                errCode: 0,
+                errMessage: 'Lấy tất cả sách thành công',
+                sach
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 const checkMaSach = async (masach) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -62,18 +79,18 @@ const createSach = async (data) => {
 }
 
 
-const editSach = (data) => {
+const editSach = (data, sachId) => {
     return new Promise(async (resolve, reject) => {
         try {
-
-            if (!data._id || !data.tenSach || !data.donGia || !data.soQuyen || !data.anhSach || !data.moTa ||
+            if (!sachId || !data.tenSach || !data.donGia || !data.soQuyen || !data.anhSach || !data.moTa ||
                 !data.namXuatBan || !data.MaXNB || !data.tacGia || !data.maSach) {
                 resolve({
                     errCode: 2,
                     errMessage: 'Thiếu tham số yêu cầu'
                 });
             }
-            let sach = await Sach.findById(data._id)
+
+            let sach = await Sach.findById(sachId)
             if (sach) {
                 // Cập nhật các trường của sách
                 sach.maSach = data.maSach;
@@ -87,6 +104,10 @@ const editSach = (data) => {
                 sach.tacGia = data.tacGia;
 
                 await sach.save();
+
+                // Lấy lại sách từ cơ sở dữ liệu sau khi lưu để có dữ liệu mới nhất
+                sach = await Sach.findById(sachId).populate('MaXNB', 'tenNXB');
+
                 resolve({
                     errCode: 0,
                     errMessage: 'Chỉnh sửa thành công',
@@ -130,24 +151,36 @@ const deleteSach = (sachId) => {
     });
 };
 
-const getAllSach = () => {
+
+let getSachById = (sachId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let sach = await Sach.find().sort({ createdAt: -1, updatedAt: -1 });
-            resolve({
-                errCode: 0,
-                errMessage: 'Lấy tất cả sách thành công',
-                sach
-            });
+            let sach = await Sach.findById(sachId).populate('MaXNB', 'tenNXB');
+            if (sach) {
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Lấy sách thành công',
+                    data: sach
+                });
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Không tìm thấy sách',
+                    data: {}
+                });
+            }
         } catch (e) {
             reject(e);
         }
     });
 };
 
+
+
 module.exports = {
     createSach,
     editSach,
     deleteSach,
-    getAllSach
+    getAllSach,
+    getSachById
 }

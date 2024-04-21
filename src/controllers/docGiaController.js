@@ -21,6 +21,26 @@ let createDocGia = async (req, res) => {
     }
 };
 
+//ogin
+let handleLogin = async (req, res) => {
+    let { dienThoai, password } = req.body;
+
+    if (!dienThoai || !password) {
+        return res.status(200).json({
+            errCode: 1,
+            message: 'Vui lòng nhập dienT hoai và password đầy đủ!'
+        })
+    }
+
+    let userData = await docGiaService.handleLogin(dienThoai, password);
+    return res.status(200).json({
+        errCode: userData.errCode,
+        errMessage: userData.errMessage,
+        docGia: userData.docGia,
+
+    })
+}
+
 
 let editDocGia = async (req, res) => {
     try {
@@ -78,6 +98,7 @@ const getAllDocGia = async (req, res) => {
 }
 
 module.exports = {
+    handleLogin,
     createDocGia,
     editDocGia,
     deleteDocGia,

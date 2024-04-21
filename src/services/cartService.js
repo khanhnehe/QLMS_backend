@@ -15,52 +15,46 @@ const addCart = async (data) => {
                 });
             }
 
-            // 
-            for (let i = 0; i < data.cartItems.length; i++) {
-                const item = data.cartItems[i];
+            // Tìm sách trong db
+            const sach = await Sach.findById(data.sachId);
 
-                // Tìm sách trong db
-                const sach = await Sach.findById(item.sach);
+            // Kiểm tra xem sách đã exist trong cart chưa
+            let isExistCartItem = cart.cartItems.find(cartItem =>
+                // ss id sách của cartItem với id sách của item đang xét
+                cartItem.sach.toString() === data.sachId.toString()
+            );
 
-
-                // Kiểm tra xem sách đã exist trong cart chưa
-                let isExistCartItem = cart.cartItems.find(cartItem =>
-                    // ss id sách của cartItem với id sách của item đang xét
-                    cartItem.sach.toString() === item.sach.toString()
-                );
-
-                if (isExistCartItem) {
-                    // Kiểm tra xem số lượng sách sau khi thêm có vượt quá 1 không
-                    if (isExistCartItem.amount + 1 > 1) {
-                        resolve({
-                            errCode: -4,
-                            errMessage: `Mỗi độc giả chỉ được mượn tối đa 1 quyển sách cùng loại!`
-                        });
-                        return;
-                    }
-                    isExistCartItem.amount += 1;
-                    isExistCartItem.price += sach.donGia;
-                } else {
-                    // Nếu sách chưa có trong giỏ hàng, thêm mới
-                    isExistCartItem = {
-                        sach: sach._id,
-                        name: sach.tenSach,
-                        image: sach.anhSach[0],
-                        price: sach.donGia,
-                        amount: 1,
-                    };
-                    cart.cartItems.push(isExistCartItem);
+            if (isExistCartItem) {
+                // Kiểm tra xem số lượng sách sau khi thêm có vượt quá 1 không
+                if (isExistCartItem.amount + data.amount > 1) {
+                    resolve({
+                        errCode: -4,
+                        errMessage: `Mỗi độc giả chỉ được mượn tối đa 1 quyển sách cùng loại!`
+                    });
+                    return;
                 }
-
-                // Cập nhật tổng giá trị giỏ hàng
-                cart.totalPrice += sach.donGia;
+                isExistCartItem.amount += data.amount;
+                isExistCartItem.price += sach.donGia * data.amount;
+            } else {
+                // Nếu sách chưa có trong giỏ hàng, thêm mới
+                const cartItem = {
+                    sach: sach._id,
+                    name: sach.tenSach,
+                    image: sach.anhSach[0],
+                    price: sach.donGia * data.amount,
+                    amount: data.amount,
+                };
+                cart.cartItems.push(cartItem);
             }
+
+            // Cập nhật tổng giá trị giỏ hàng
+            cart.totalPrice += sach.donGia * data.amount;
 
             await cart.save();
 
             resolve({
                 errCode: 0,
-                errMessage: 'ok',
+                errMessage: 'Đã thêm sách vào giỏ hàng',
                 cart
             });
 

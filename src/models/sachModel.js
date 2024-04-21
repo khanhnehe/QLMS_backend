@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const NXB = require('./NXBModel');
+// const NXB = require('./NXBModel');
 const { ObjectId } = mongoose.Schema;
 
 const userSchema = mongoose.Schema(
@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema(
             required: [true, 'Vui lòng nhập tên sách!'],
         },
         anhSach: {
-            type: Array,
+            type: String,
             required: [true, 'Vui lòng thêm ảnh!'],
         },
         moTa: {

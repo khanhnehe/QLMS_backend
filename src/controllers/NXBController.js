@@ -10,7 +10,7 @@ let createNXB = async (req, res) => {
         return res.status(200).json({
             errCode: response.errCode,
             errMessage: response.errMessage,
-            NXB: response.nxb
+            nxb: response.nxb
         });
     } catch (e) {
         console.log(e)
@@ -29,7 +29,7 @@ let editNXB = async (req, res) => {
         return res.status(200).json({
             errCode: response.errCode,
             errMessage: response.errMessage,
-            NXB: response.NXB
+            nxb: response.nxb
         });
     } catch (e) {
         console.log(e)
@@ -43,8 +43,8 @@ let editNXB = async (req, res) => {
 
 const deleteNXB = async (req, res) => {
     try {
-        let NXBId = req.params.NXBId;
-        let response = await NXBService.deleteNXB(NXBId);
+        let nxbId = req.params.nxbId;
+        let response = await NXBService.deleteNXB(nxbId);
         return res.status(200).json({
             errCode: response.errCode,
             errMessage: response.errMessage,
@@ -64,7 +64,7 @@ const getAllNXB = async (req, res) => {
         return res.status(200).json({
             errCode: response.errCode,
             errMessage: response.errMessage,
-            NXB: response.NXB
+            nxb: response.nxb
         });
     } catch (e) {
         console.log(e)

@@ -63,6 +63,39 @@ const createDocGia = async (data) => {
     })
 }
 
+let handleLogin = (dienThoai, password) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Check if DocGia exists
+            let docGia = await DocGia.findOne({ dienThoai });
+
+            if (docGia) {
+                let checkPass = await bcrypt.compare(password, docGia.password);
+                if (checkPass) {
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'login successful',
+                        docGia
+
+                    });
+                } else {
+                    resolve({
+                        errCode: 2,
+                        errMessage: 'Invalid password'
+                    });
+                }
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'sdt does not exist, try a different sdt'
+                });
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 const editDocGia = (docgiaId, data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -123,7 +156,7 @@ const deleteDocGia = (docgiaId) => {
                 })
                 resolve({
                     errCode: 0,
-                    errMessage: 'delete user success',
+                    errMessage: 'delete DocGia success',
                     // checkDocGia: docGia
                 })
             }
@@ -154,6 +187,7 @@ const getAllDocGia = () => {
 module.exports = {
     createDocGia,
     editDocGia,
+    handleLogin,
     deleteDocGia,
     getAllDocGia
 }

@@ -15,10 +15,11 @@ let router = express.Router();
 let initWebRouters = (app) => {
     router.get("/", testHome.getHome);
     //docgia
-    router.post('/api/createDocGia', docGiaController.createDocGia)
-    router.put('/api/editDocGia/:docgiaId', docGiaController.editDocGia)
-    router.delete('/api/deleteDocGia/:docgiaId', docGiaController.deleteDocGia)
-    router.get('/api/getAllDocGia', docGiaController.getAllDocGia)
+    router.post('/login', docGiaController.handleLogin)
+    router.post('/createDocGia', docGiaController.createDocGia)
+    router.put('/editDocGia/:docgiaId', docGiaController.editDocGia)
+    router.delete('/deleteDocGia/:docgiaId', docGiaController.deleteDocGia)
+    router.get('/getAllDocGia', docGiaController.getAllDocGia)
 
     //nxb
     router.post('/createNXB', NXBController.createNXB)
@@ -28,9 +29,11 @@ let initWebRouters = (app) => {
 
     //sách
     router.post('/createSach', sachController.createSach)
-    router.put('/editSach', sachController.editSach)
+    router.put('/editSach/:sachId', sachController.editSach)
     router.delete('/deleteSach/:sachId', sachController.deleteSach)
     router.get('/getAllSach', sachController.getAllSach)
+    router.get('/getSachById/:sachId', sachController.getSachById)
+
 
     //nhân viên
     router.post('/createNhanVien', nhanVienController.createNhanVien)

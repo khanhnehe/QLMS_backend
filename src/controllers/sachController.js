@@ -23,8 +23,9 @@ let createSach = async (req, res) => {
 
 let editSach = async (req, res) => {
     try {
+        let sachId = req.params.sachId;
         let data = req.body;
-        let response = await sachService.editSach(data);
+        let response = await sachService.editSach(data, sachId);
         return res.status(200).json({
             errCode: response.errCode,
             errMessage: response.errMessage,
@@ -74,9 +75,27 @@ const getAllSach = async (req, res) => {
     }
 }
 
+let getSachById = async (req, res) => {
+    try {
+        let sachId = req.params.sachId;
+        let sach = await sachService.getSachById(sachId);
+        return res.status(200).json({
+            errCode: sach.errCode,
+            errMessage: sach.errMessage,
+            sach: sach.data
+        });
+    } catch (e) {
+        return res.status(500).json({
+            errCode: -1,
+            errMessage: 'Error from server!'
+        });
+    }
+}
+
 module.exports = {
     createSach,
     editSach,
     deleteSach,
-    getAllSach
+    getAllSach,
+    getSachById
 }

@@ -76,10 +76,10 @@ const editNXB = (data) => {
     });
 };
 
-const deleteNXB = (NXBId) => {
+const deleteNXB = (nxbId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let checkNXB = await NXB.findById({ _id: NXBId });
+            let checkNXB = await NXB.findById({ _id: nxbId });
 
             if (!checkNXB) {
                 resolve({
@@ -87,7 +87,7 @@ const deleteNXB = (NXBId) => {
                     errMessage: 'NXB không tìm thấy'
                 });
             } else {
-                await NXB.findByIdAndDelete({ _id: NXBId });
+                await NXB.findByIdAndDelete({ _id: nxbId });
                 resolve({
                     errCode: 0,
                     errMessage: 'Xóa NXB thành công'
@@ -102,11 +102,11 @@ const deleteNXB = (NXBId) => {
 const getAllNXB = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let NXB = await NXB.find().sort({ createdAt: -1, updatedAt: -1 });
+            let nxb = await NXB.find().sort({ createdAt: -1, updatedAt: -1 })
             resolve({
                 errCode: 0,
                 errMessage: 'Lấy tất cả NXB thành công',
-                NXB
+                nxb: nxb
             });
         } catch (e) {
             reject(e);
