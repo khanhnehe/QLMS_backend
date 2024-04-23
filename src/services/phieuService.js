@@ -52,7 +52,7 @@ const checkOutPhieu = (data) => {
     });
 }
 
-const confirmStatus = (phieuId, trangThai) => {
+const confirmStatus = (phieuId, actionStatus) => {
     return new Promise(async (resolve, reject) => {
         try {
             const phieu = await PhieuMuon.findById(phieuId);
@@ -62,21 +62,26 @@ const confirmStatus = (phieuId, trangThai) => {
                     errMessage: 'Phiếu not found'
                 });
             } else {
-                let actionStatus = { trangThai: trangThai };
 
-                // Nếu trạng thái mới là "Đang mượn", cập nhật ngayMuon và ngayTra
-                if (trangThai === 'Đang mượn') {
-                    actionStatus.ngayMuon = new Date();
-                    actionStatus.hanTra = new Date();
-                    actionStatus.hanTra.setDate(actionStatus.ngayMuon.getDate() + 15);
-                }
-                // Nếu trạng thái mới là "Đã trả", cập nhật ngayTra
-                if (trangThai === 'Đã trả') {
-                    actionStatus.ngayTra = new Date();
+                if (actionStatus === 'Hủy Mượn') {
+                    phieu.ngayMuon = new Date();
+                    phieu.hanTra = new Date();
+                    phieu.trangThai = "Đã hủy";
                 }
 
+                else if (actionStatus === 'Đang mượn') {
+                    phieu.ngayMuon = new Date();
+                    phieu.hanTra = new Date();
+                    phieu.trangThai = "Đang mượn",
+                        phieu.hanTra.setDate(phieu.ngayMuon.getDate() + 15);
+                }
 
-                await PhieuMuon.updateOne({ _id: phieuId }, actionStatus);
+                else if (actionStatus === 'Đã trả') {
+                    phieu.trangThai = "Đã trả",
+                        phieu.ngayTra = new Date();
+                }
+                await phieu.save();
+
                 resolve({
                     errCode: 0,
                     errMessage: 'Trạng thái đã được cập nhật',
@@ -104,9 +109,48 @@ const getAllPhieu = () => {
     })
 }
 
+const getPhieuById = async (docgiaId) => {
+    try {
+        const phieu = await PhieuMuon.find({ docgia: docgiaId }).populate('PhieuMuonItems.sach').sort({ createdAt: -1 });;
+        if (!phieu) {
+            return {
+                errCode: 1,
+                errMessage: 'Phieu not found!'
+            }
+        }
+        return {
+            errCode: 0,
+            errMessage: 'ok',
+            phieu
+        };
+    } catch (error) {
+        throw error;
+    }
+}
+
+const getPhieuByStatus = async (status) => {
+    try {
+        const phieu = await PhieuMuon.find({ trangThai: status }).sort({ createdAt: -1 });
+        if (!phieu) {
+            return {
+                errCode: 1,
+                errMessage: 'Phieu not found!'
+            }
+        }
+        return {
+            errCode: 0,
+            errMessage: 'ok',
+            phieu
+        };
+    } catch (error) {
+        throw error;
+    }
+}
 
 module.exports = {
     checkOutPhieu,
     confirmStatus,
-    getAllPhieu
+    getAllPhieu,
+    getPhieuById,
+    getPhieuByStatus
 }

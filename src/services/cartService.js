@@ -40,8 +40,9 @@ const addCart = async (data) => {
                 const cartItem = {
                     sach: sach._id,
                     name: sach.tenSach,
-                    image: sach.anhSach[0],
+                    image: sach.anhSach,
                     price: sach.donGia * data.amount,
+                    masach: sach.maSach,
                     amount: data.amount,
                 };
                 cart.cartItems.push(cartItem);
@@ -95,7 +96,6 @@ const deleteSachCart = (itemId) => {
     return new Promise(async (resolve, reject) => {
         try {
             // Tìm giỏ hàng chứa mục cần xóa
-            // Đk find là có ít nhất một đối tượng trong mảng 'cartItems' có '_id' bằng 'itemId'
             let cart = await Cart.findOne({ 'cartItems._id': itemId });
             if (!cart) {
                 resolve({
@@ -104,14 +104,6 @@ const deleteSachCart = (itemId) => {
                 });
             }
             else {
-                //tìm sp cần xóa trong cart
-                const itemToDelete = cart.cartItems.find(item => item._id.toString() === itemId);
-
-                if (itemToDelete) {
-                    cart.totalPrice -= itemToDelete.itemsPrice;
-                }
-
-                //  mục có _id khớp với itemId đã không còn trong mảng cartItems nữa
                 // Xóa sản phẩm khỏi giỏ hàng
                 cart.cartItems = cart.cartItems.filter(item => item._id.toString() !== itemId);
 

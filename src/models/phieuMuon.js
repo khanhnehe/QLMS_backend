@@ -6,8 +6,15 @@ const PhieuMuonItemSchema = new mongoose.Schema({
         ref: 'Sach',
         required: true
     },
-    image: [String],
+    image: {
+        type: String,
+        required: true
 
+    },
+    masach: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -49,7 +56,7 @@ const PhieuMuonSchema = new mongoose.Schema({
 
     trangThai: {
         type: String,
-        enum: ['Chờ xác nhận', 'Đang mượn', 'Đã trả',],
+        enum: ['Chờ xác nhận', 'Đang mượn', 'Đã trả', 'Đã hủy'],
         default: 'Chờ xác nhận'
     }
 }, {

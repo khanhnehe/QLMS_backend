@@ -7,9 +7,16 @@ const cartItemSchema = new mongoose.Schema({
         required: true
     },
     image: {
-        type: Array,
+        type: String,
+        required: true
+
     },
     name: {
+        type: String,
+        required: true
+    },
+
+    masach: {
         type: String,
         required: true
     },
@@ -32,11 +39,11 @@ const cartSchema = new mongoose.Schema({
     },
     cartItems: [cartItemSchema],
 
-    totalPrice: {
-        type: Number,
-        required: true,
-        default: 0
-    },
+    // totalPrice: {
+    //     type: Number,
+    //     required: true,
+    //     default: 0
+    // },
 }, {
     timestamps: true,
 });
