@@ -36,6 +36,7 @@ let initWebRouters = (app) => {
 
 
     //nhân viên
+    router.post('/loginAdmin', nhanVienController.loginAdmin)
     router.post('/createNhanVien', nhanVienController.createNhanVien)
     router.put('/editNhanVien', nhanVienController.editNhanVien)
     router.delete('/deleteNhanVien/:nhanVienId', nhanVienController.deleteNhanVien)

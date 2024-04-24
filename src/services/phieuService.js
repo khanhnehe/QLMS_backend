@@ -97,7 +97,9 @@ const confirmStatus = (phieuId, actionStatus) => {
 const getAllPhieu = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const phieu = await PhieuMuon.find().sort({ createdAt: -1, updatedAt: -1 })
+            const phieu = await PhieuMuon.find()
+                .populate('docgia')
+                .sort({ createdAt: -1, updatedAt: -1 })
             resolve({
                 errCode: 0,
                 errMessage: 'ok',

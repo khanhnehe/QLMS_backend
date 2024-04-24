@@ -65,7 +65,37 @@ const createNhanVien = async (data) => {
 
 }
 
+const loginAdmin = async (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let nhanVien = await NhanVien.findOne({ dienThoai: data.dienThoai });
 
+            if (!nhanVien) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'số điện thoại không đúng!'
+                });
+            }
+
+            let isPasswordMatch = await bcrypt.compare(data.password, nhanVien.password);
+
+            if (!isPasswordMatch) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Mật khẩu không chính xác!'
+                });
+            }
+
+            resolve({
+                errCode: 0,
+                message: 'OK',
+                nhanVien
+            });
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
 const editNhanVien = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -152,5 +182,6 @@ module.exports = {
     createNhanVien,
     editNhanVien,
     deleteNhanVien,
-    getAllNhanVien
+    getAllNhanVien,
+    loginAdmin
 }
