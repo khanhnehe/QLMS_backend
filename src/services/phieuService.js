@@ -1,4 +1,4 @@
-import PhieuMuon from '../models/phieuMuon';
+import PhieuTheoDoi from '../models/phieuMuon';
 import Cart from '../models/cartModel';
 
 const checkOutPhieu = (data) => {
@@ -30,7 +30,7 @@ const checkOutPhieu = (data) => {
             });
 
             // Tạo phiếu mượn mới
-            const phieu = await PhieuMuon.create({
+            const phieu = await PhieuTheoDoi.create({
                 docgia: data.docgia,
                 PhieuMuonItems: cart.cartItems,
                 totalPrice: totalPrice,
@@ -55,7 +55,7 @@ const checkOutPhieu = (data) => {
 const confirmStatus = (phieuId, actionStatus) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const phieu = await PhieuMuon.findById(phieuId);
+            const phieu = await PhieuTheoDoi.findById(phieuId);
             if (!phieu) {
                 resolve({
                     errCode: 1,
@@ -97,7 +97,7 @@ const confirmStatus = (phieuId, actionStatus) => {
 const getAllPhieu = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const phieu = await PhieuMuon.find()
+            const phieu = await PhieuTheoDoi.find()
                 .populate('docgia')
                 .sort({ createdAt: -1, updatedAt: -1 })
             resolve({
@@ -113,7 +113,7 @@ const getAllPhieu = () => {
 
 const getPhieuById = async (docgiaId) => {
     try {
-        const phieu = await PhieuMuon.find({ docgia: docgiaId }).populate('PhieuMuonItems.sach').sort({ createdAt: -1 });;
+        const phieu = await PhieuTheoDoi.find({ docgia: docgiaId }).populate('PhieuMuonItems.sach').sort({ createdAt: -1 });;
         if (!phieu) {
             return {
                 errCode: 1,
@@ -132,7 +132,7 @@ const getPhieuById = async (docgiaId) => {
 
 const getPhieuByStatus = async (status) => {
     try {
-        const phieu = await PhieuMuon.find({ trangThai: status }).sort({ createdAt: -1 });
+        const phieu = await PhieuTheoDoi.find({ trangThai: status }).sort({ createdAt: -1 });
         if (!phieu) {
             return {
                 errCode: 1,

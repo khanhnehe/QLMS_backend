@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PhieuMuonItemSchema = new mongoose.Schema({
+const PhieuTheoDoiItemSchema = new mongoose.Schema({
     sach: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Sach',
@@ -25,13 +25,13 @@ const PhieuMuonItemSchema = new mongoose.Schema({
     }
 });
 
-const PhieuMuonSchema = new mongoose.Schema({
+const PhieuTheoDoiSchema = new mongoose.Schema({
     docgia: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DocGia',
         required: true
     },
-    PhieuMuonItems: [PhieuMuonItemSchema],
+    PhieuMuonItems: [PhieuTheoDoiItemSchema],
 
     orderCode: {
         type: String,
@@ -63,7 +63,7 @@ const PhieuMuonSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-const PhieuMuon = mongoose.model('PhieuMuon', PhieuMuonSchema);
+const PhieuTheoDoi = mongoose.model('PhieuTheoDoi', PhieuTheoDoiSchema);
 
-module.exports = PhieuMuon;
+module.exports = PhieuTheoDoi;
 
